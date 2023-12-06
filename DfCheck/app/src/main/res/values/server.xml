@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="server_array">
+        <item>안톤</item>
+        <item>바칼</item>
+        <item>카인</item>
+        <item>카시야스</item>
+        <item>디레지에</item>
+        <item>힐더</item>
+        <item>프레이</item>
+        <item>시로코</item>
+    </string-array>
+
+    <string-array name="server_ids">
+        <item>anton</item>
+        <item>bakal</item>
+        <item>cain</item>
+        <item>casillas</item>
+        <item>diregie</item>
+        <item>hilder</item>
+        <item>prey</item>
+        <item>siroco</item>
+    </string-array>
+</resources>
