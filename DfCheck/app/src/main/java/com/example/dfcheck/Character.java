@@ -23,6 +23,10 @@ public class Character {
         String jsonText = jsonString.substring(jsonString.indexOf("{"));
 
         try {
+            if (ApiUtils.isErrorResponse(jsonString)){
+                this.valid = false;
+                return;
+            }
             JSONObject jsonObject = new JSONObject(jsonText);
             JSONArray rowsArray = jsonObject.getJSONArray("rows");
             JSONObject characterInfo = rowsArray.getJSONObject(0);

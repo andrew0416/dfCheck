@@ -1,6 +1,7 @@
 package com.example.dfcheck;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,20 @@ public class CharacterAdapter extends ArrayAdapter<Character> {
         String ImageLink = ApiUtils.searchCharacterImage(character.getServerId(), character.getCharacterId(), 1);
         Glide.with(context).load(ImageLink).into(imageViewCharacter);
 
+        rowView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 클릭된 항목의 정보를 가져옴
+                Character selectedCharacter = characters.get(position);
+
+                // Intent를 사용하여 다른 화면으로 이동
+                Intent intent = new Intent(context, WeeklyGoalsActivity.class);
+                intent.putExtra("characterName", selectedCharacter.getCharacterName());
+                intent.putExtra("characterID", selectedCharacter.getCharacterId());
+                intent.putExtra("serverID", selectedCharacter.getServerId());
+                context.startActivity(intent);
+            }
+        });
 
         ImageButton deleteButton = rowView.findViewById(R.id.imageButtonDelete);
 

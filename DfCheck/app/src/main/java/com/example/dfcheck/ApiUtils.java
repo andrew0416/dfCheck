@@ -3,6 +3,9 @@ package com.example.dfcheck;
 import android.content.Context;
 import android.content.res.Resources;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -81,6 +84,22 @@ public class ApiUtils {
         }
     }
 
+    public static String timeLineLegion(String serverId, String characterId, String startDate, String endDate, Context context) {
+
+        try {
+            String encodedServer = URLEncoder.encode(serverId, "UTF-8");
+            String encodedCharacterName = URLEncoder.encode(characterId, "UTF-8");
+            String encodedSDate = URLEncoder.encode(startDate, "UTF-8");
+            String encodedEDate = URLEncoder.encode(endDate, "UTF-8");
+
+            return BASE_URL + "/df/servers/" + encodedServer + "/characters?characterName=" + encodedCharacterName + "/timeline?code=209&startDate="+ encodedSDate + "&endDate="+ encodedEDate + "&apikey=" + API_KEY;
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public static String searchCharacterImage(String serverId, String characterId, int zoom) {
         try {
             String encodedServer = URLEncoder.encode(serverId, "UTF-8");
@@ -92,5 +111,22 @@ public class ApiUtils {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static boolean isErrorResponse(String jsonString) {
+        try {
+            JSONObject jsonObject = new JSONObject(jsonString);
+            if (jsonObject.has("error")) {
+                JSONObject errorObject = jsonObject.getJSONObject("error");
+                if (errorObject.has("status") &&
+                        errorObject.has("code") &&
+                        errorObject.has("message")) {
+                    return true;
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

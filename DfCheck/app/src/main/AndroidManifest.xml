@@ -15,6 +15,9 @@
         android:theme="@style/Theme.DfCheck"
         tools:targetApi="31">
         <activity
+            android:name=".WeeklyGoalsActivity"
+            android:exported="false" />
+        <activity
             android:name=".character_item"
             android:exported="false"
             android:label="@string/title_activity_character_item"
