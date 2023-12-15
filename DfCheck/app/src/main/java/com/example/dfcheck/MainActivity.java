@@ -94,8 +94,12 @@ public class MainActivity extends AppCompatActivity {
 
             if (character != null) {
                 String text = character.getFame() + " " + character.getCharacterName();
-                resultLayout.setVisibility(View.VISIBLE);
-                resultTextView.setText(text);
+
+                if (character.isValid()){
+                    resultLayout.setVisibility(View.VISIBLE);
+                    resultTextView.setText(text);
+                }
+
 
                 resultLayout.post(new Runnable() {
                     @Override

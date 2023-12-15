@@ -36,19 +36,19 @@ public class CharacterDB extends SQLiteOpenHelper {
     public void addCharacter(Character character) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        // Character ID가 이미 존재하는지 확인
         if (!isCharacterIdExists(character.getCharacterId())) {
-            // Character ID가 존재하지 않으면 추가
-            ContentValues values = new ContentValues();
-            values.put(CharacterContract.CharacterEntry.COLUMN_SERVER_ID, character.getServerId());
-            values.put(CharacterContract.CharacterEntry.COLUMN_CHARACTER_ID, character.getCharacterId());
-            values.put(CharacterContract.CharacterEntry.COLUMN_CHARACTER_NAME, character.getCharacterName());
-            values.put(CharacterContract.CharacterEntry.COLUMN_JOB_NAME, character.getJobName());
-            values.put(CharacterContract.CharacterEntry.COLUMN_JOB_GROW_NAME, character.getJobGrowName());
-            values.put(CharacterContract.CharacterEntry.COLUMN_FAME, character.getFame());
+            if (character.isValid()) {
+                ContentValues values = new ContentValues();
+                values.put(CharacterContract.CharacterEntry.COLUMN_SERVER_ID, character.getServerId());
+                values.put(CharacterContract.CharacterEntry.COLUMN_CHARACTER_ID, character.getCharacterId());
+                values.put(CharacterContract.CharacterEntry.COLUMN_CHARACTER_NAME, character.getCharacterName());
+                values.put(CharacterContract.CharacterEntry.COLUMN_JOB_NAME, character.getJobName());
+                values.put(CharacterContract.CharacterEntry.COLUMN_JOB_GROW_NAME, character.getJobGrowName());
+                values.put(CharacterContract.CharacterEntry.COLUMN_FAME, character.getFame());
 
-            db.insert(CharacterContract.CharacterEntry.TABLE_NAME, null, values);
-            Log.d("CharacterDB", "New character added with ID: " + character.getCharacterId());
+                db.insert(CharacterContract.CharacterEntry.TABLE_NAME, null, values);
+                Log.d("CharacterDB", "New character added with ID: " + character.getCharacterId());
+            }
         }
 
         db.close();

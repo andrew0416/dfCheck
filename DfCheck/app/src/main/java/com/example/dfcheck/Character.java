@@ -14,6 +14,7 @@ public class Character {
     private String jobName;
     private String jobGrowName;
     private int fame;
+    private boolean valid;
 
     public Character() {
     }
@@ -35,6 +36,12 @@ public class Character {
             this.jobName = characterInfo.getString("jobName");
             this.jobGrowName = characterInfo.getString("jobGrowName");
             this.fame = characterInfo.getInt("fame");
+
+            this.valid = true;
+            if(this.characterId == null) {
+                this.valid = false;
+            }
+
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -76,6 +83,10 @@ public class Character {
 
     public String getJobGrowName() {
         return this.jobGrowName;
+    }
+
+    public boolean isValid() {
+        return this.valid;
     }
 
     public void setServerId(String serverId) {
