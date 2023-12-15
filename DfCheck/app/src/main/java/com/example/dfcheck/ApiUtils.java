@@ -92,7 +92,7 @@ public class ApiUtils {
             String encodedSDate = URLEncoder.encode(startDate, "UTF-8");
             String encodedEDate = URLEncoder.encode(endDate, "UTF-8");
 
-            return BASE_URL + "/df/servers/" + encodedServer + "/characters?characterName=" + encodedCharacterName + "/timeline?code=209&startDate="+ encodedSDate + "&endDate="+ encodedEDate + "&apikey=" + API_KEY;
+            return BASE_URL + "/df/servers/" + encodedServer + "/characters/" + encodedCharacterName + "/timeline?code=209&startDate="+ encodedSDate + "&endDate=" + encodedEDate + "&apikey=" + API_KEY;
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

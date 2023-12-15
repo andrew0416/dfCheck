@@ -76,6 +76,10 @@ public class WeeklyGoalsActivity extends AppCompatActivity {
         private TextView textView2;
         private TextView textView3;
 
+        private String t1;
+        private String t2;
+        private String t3;
+
 
         public ApiTask(Context context, LinearLayout Layout,  String apiText) {
             this.context = context;
@@ -108,24 +112,24 @@ public class WeeklyGoalsActivity extends AppCompatActivity {
                         String regionName = data.getString("regionName");
 
                         // 클리어한 지역에 대한 처리
-                        if (regionName == "이스핀즈"){
-                            ispinzCleared = true;
-                        }
-                        if (regionName == "차원회랑"){
-                            chawonCleared = true;
-                        }
-                        if (regionName == "어둑섬"){
-                            odokCleared = true;
+                        switch (regionName) {
+                            case "이스핀즈":
+                                ispinzCleared = true;
+                                break;
+                            case "차원회랑":
+                                chawonCleared = true;
+                                break;
+                            case "어둑섬":
+                                odokCleared = true;
+                                break;
                         }
                     }
                     // 여기서 결과를 출력하거나 저장할 수 있습니다.
-                    String result1 = String.format("이스핀즈: %s", ispinzCleared ? "O" : "X");
-                    String result2 = String.format("차원회랑: %s", chawonCleared ? "O" : "X");
-                    String result3 = String.format("어둑섬: %s", odokCleared ? "O" : "X");
+                    this.t1 = String.format("이스핀즈: %s", ispinzCleared ? "O" : "X");
+                    this.t2 = String.format("차원회랑: %s", chawonCleared ? "O" : "X");
+                    this.t3 = String.format("어둑섬: %s", odokCleared ? "O" : "X");
 
-                    textView1.setText(result1);
-                    textView2.setText(result2);
-                    textView3.setText(result3);
+
                 }
 
             } catch (JSONException e) {
@@ -136,6 +140,10 @@ public class WeeklyGoalsActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String jsonText) {
+            //textView1.setText(jsonText);
+            textView1.setText(t1);
+            textView2.setText(t2);
+            textView3.setText(t3);
         }
     }
 }
