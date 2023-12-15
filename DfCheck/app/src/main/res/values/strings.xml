@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">DfCheck</string>
+    <string name="title_activity_character_item">character_item</string>
 </resources>

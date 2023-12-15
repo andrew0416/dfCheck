@@ -2,15 +2,21 @@ package com.example.dfcheck;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
         // Spinner에 서버 목록 설정
         Spinner spinnerServer = findViewById(R.id.spinnerServer);
         EditText editTextNickname = findViewById(R.id.editTextNickname);
-        TextView textViewApiResponse = findViewById(R.id.textViewApiResponse); // TextView 초기화
+        LinearLayout resultLayout = findViewById(R.id.resultLayout);
+        ListView listViewCharacters = findViewById(R.id.listViewCharacters);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this,
@@ -32,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerServer.setAdapter(adapter);
 
+        updateListView(MainActivity.this, listViewCharacters);
+
         Button buttonCheckCharacter = findViewById(R.id.buttonCheckCharacter);
         buttonCheckCharacter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,48 +48,82 @@ public class MainActivity extends AppCompatActivity {
                 String selectedServer = spinnerServer.getSelectedItem().toString();
                 String characterName = editTextNickname.getText().toString();
 
-                new CharacterSearchTask(textViewApiResponse).execute(selectedServer, characterName);
+                new TestExecutionTask(MainActivity.this, resultLayout, listViewCharacters).execute(selectedServer, characterName);
             }
         });
     }
-    private class CharacterSearchTask extends AsyncTask<String, Void, String> {
-        private final TextView textViewApiResponse;
 
-        CharacterSearchTask(TextView textViewApiResponse) {
-            this.textViewApiResponse = textViewApiResponse;
+    private void updateListView(Context context, ListView listViewCharacters) {
+        // 데이터베이스에서 모든 캐릭터를 가져오기
+        CharacterDB characterDB = new CharacterDB(context);
+        List<Character> characters = characterDB.getAllCharacters();
+
+        // 어댑터에 데이터 설정
+        CharacterAdapter adapter = new CharacterAdapter(context, characters);
+
+        listViewCharacters.setAdapter(adapter);
+    }
+
+    private class TestExecutionTask extends AsyncTask<String, Void, String> {
+        private Context context;
+        private LinearLayout resultLayout; // 변경된 부분
+        private TextView resultTextView;
+        private Button confirmButton;
+        private Button cancelButton;
+        private ListView listViewCharacters;
+
+        public TestExecutionTask(Context context, LinearLayout resultLayout, ListView listViewCharacters) {
+            this.context = context;
+            this.resultLayout = resultLayout;
+            this.resultTextView = resultLayout.findViewById(R.id.textViewResult);
+            this.confirmButton = resultLayout.findViewById(R.id.buttonConfirm);
+            this.cancelButton = resultLayout.findViewById(R.id.buttonCancel);
+            this.listViewCharacters = listViewCharacters;
         }
         @Override
         protected String doInBackground(String... params) {
-            // params[0]: selectedServer, params[1]: characterName
             String selectedServer = params[0];
             String characterName = params[1];
-
-            // API 호출 및 JSON 응답을 문자열로 반환
             return ApiUtils.callApiAndGetResponse(ApiUtils.searchCharacter(selectedServer, characterName, getApplicationContext()));
         }
 
         @Override
         protected void onPostExecute(String jsonResponse) {
-            // UI 갱신: API 응답을 받아서 처리하는 부분
-            if (jsonResponse != null) {
-                // JSON을 Character 객체로 파싱
-                Character character = Character.fromJson(jsonResponse);
+            Character character = new Character();
+            character.fromJson(jsonResponse);
 
-                if (character != null) {
-                    // Character 객체에서 캐릭터의 이름을 가져와서 표시
-                    String characterNameResult = "캐릭터 이름: " + character.getCharacterName();
-                    textViewApiResponse.setText(characterNameResult);
+            if (character != null) {
+                String text = character.getFame() + " " + character.getCharacterName();
+                resultLayout.setVisibility(View.VISIBLE);
+                resultTextView.setText(text);
 
-                    // textViewApiResponse를 보이게 설정
-                    textViewApiResponse.setVisibility(View.VISIBLE);
-                } else {
-                    // JSON 파싱 실패
-                    Toast.makeText(MainActivity.this, "JSON 파싱 실패", Toast.LENGTH_SHORT).show();
-                }
+                resultLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        confirmButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                CharacterDB characterDB = new CharacterDB(context);
+                                characterDB.addCharacter(character);
+                                resultLayout.setVisibility(View.GONE);
+
+                                updateListView(context, listViewCharacters);
+                            }
+                        });
+
+                        cancelButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                resultLayout.setVisibility(View.GONE);
+                                updateListView(context, listViewCharacters);
+                            }
+                        });
+                    }
+                });
+
             } else {
-                // API 호출 실패 또는 응답이 없는 경우
-                Toast.makeText(MainActivity.this, "API 호출 실패 또는 응답 없음", Toast.LENGTH_SHORT).show();
             }
         }
     }
+
 }

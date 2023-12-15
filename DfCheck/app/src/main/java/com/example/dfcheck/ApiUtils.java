@@ -16,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 public class ApiUtils {
 
     private static final String BASE_URL = "https://api.neople.co.kr";
+    private static final String IMAGE_URL = "https://img-api.neople.co.kr/";
     private static final String API_KEY = "sdKwTj8OPv2qYUo9LiESRxIM9D3lyJVF";
 
     public static String callApiAndGetResponse(String apiUrl) {
@@ -73,6 +74,19 @@ public class ApiUtils {
             String encodedCharacterName = URLEncoder.encode(characterName, "UTF-8");
 
             return BASE_URL + "/df/servers/" + encodedServer + "/characters?characterName=" + encodedCharacterName + "&apikey=" + API_KEY;
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static String searchCharacterImage(String serverId, String characterId, int zoom) {
+        try {
+            String encodedServer = URLEncoder.encode(serverId, "UTF-8");
+            String encodedCharacterID = URLEncoder.encode(characterId, "UTF-8");
+            String stringZoom = zoom + "";
+            return IMAGE_URL + "/df/servers/" + encodedServer + "/characters/" + encodedCharacterID + "?zoom=" + stringZoom;
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

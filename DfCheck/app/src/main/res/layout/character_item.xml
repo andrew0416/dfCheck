@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="horizontal"
+android:padding="16dp">
+
+<!-- 이미지뷰 (사진 등) -->
+<ImageView
+    android:id="@+id/imageViewCharacter"
+    android:layout_width="48dp"
+    android:layout_height="48dp"
+    android:src="@drawable/portrait"
+    android:scaleType="centerCrop"
+    android:layout_gravity="center_vertical"/>
+
+<!-- 기존의 LinearLayout (캐릭터 정보) -->
+<LinearLayout
+    android:id="@+id/characterInfoLayout"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:orientation="vertical"
+    android:gravity="center_vertical"
+    android:layout_marginStart="16dp">
+
+    <TextView
+        android:id="@+id/textViewCharacterName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#000000"/>
+
+    <TextView
+        android:id="@+id/textViewServerId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="#333333"/>
+
+    <TextView
+        android:id="@+id/textViewJobInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="#333333"/>
+
+</LinearLayout>
+
+
+    <ImageButton
+        android:id="@+id/imageButtonDelete"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/del"
+        android:background="?android:selectableItemBackground"
+        android:scaleType="centerInside"
+        android:layout_gravity="center_vertical"/>
+</LinearLayout>
